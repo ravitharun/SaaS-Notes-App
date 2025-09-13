@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
+import Navbar from "./Navbar";
 
 function Note() {
   // Initial Notes
   const sampleNotes = [
     {
       id: 1,
-      title: "Meeting Notes",
+      title: "Meetingaadadad Notes",
       content: "Discuss project milestones and deadlines.",
     },
   ];
@@ -20,16 +21,14 @@ function Note() {
 
   // Add Notes Handler
   const AddNotes = (e) => {
-    alert('hi')
     e.preventDefault();
     const newNote = {
       id: Date.now(),
       title: Title.current.value,
       content: Content.current.value,
     };
-
     if (!newNote.title || !newNote.content) {
-      return alert("FILL THE FORM");
+     return  alert("fills THE news  form bro");
     }
 
     setNotes([...notes, newNote]); // ✅ Add to state
@@ -42,6 +41,7 @@ function Note() {
 
   return (
     <>
+    <Navbar></Navbar>
       {/* Popup Add Note Form */}
       {open && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -117,12 +117,12 @@ function Note() {
                 className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition"
               >
                 <h2 className="text-xl font-semibold text-gray-700 mb-2">
-                  {note.title}
+                  {note.title}f
                 </h2>
                 <p className="text-gray-600">{note.content}</p>
                 <div className="mt-4 flex justify-end space-x-2">
                   <button className="text-blue-500 hover:underline">
-                    Edit
+                    Editdddings
                   </button>
                   <button className="text-red-500 hover:underline">
                     Delete

@@ -1,7 +1,4 @@
-import React from "react";
-import Login from "./Components/LoginPages/Login";
-import Register from "./Components/LoginPages/Register";
-import Note from "./Components/Pages/note";
+import Note from "./Components/Note";
 
 function App() {
   return (
