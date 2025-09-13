@@ -6,8 +6,8 @@ import Note from "./Components/Pages/note";
 function App() {
   return (
     <>
-      <Login></Login>
-      <Register></Register>
+      {/* <Login></Login>
+      <Register></Register> */}
       <Note></Note>
     </>
   );

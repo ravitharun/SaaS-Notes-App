@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 function Note() {
+  // Initial Notes
   const sampleNotes = [
     {
       id: 1,
@@ -9,7 +10,35 @@ function Note() {
     },
   ];
 
+  // State for popup + notes
   const [open, setOpen] = useState(false);
+  const [notes, setNotes] = useState(sampleNotes);
+
+  // Refs for inputs
+  const Title = useRef("");
+  const Content = useRef("");
+
+  // Add Notes Handler
+  const AddNotes = (e) => {
+    alert('hi')
+    e.preventDefault();
+    const newNote = {
+      id: Date.now(),
+      title: Title.current.value,
+      content: Content.current.value,
+    };
+
+    if (!newNote.title || !newNote.content) {
+      return alert("FILL THE FORM");
+    }
+
+    setNotes([...notes, newNote]); // ✅ Add to state
+    setOpen(false); // Close popup
+
+    // Clear input fields
+    Title.current.value = "";
+    Content.current.value = "";
+  };
 
   return (
     <>
@@ -17,7 +46,9 @@ function Note() {
       {open && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-6 font-sans relative">
-            <h2 className="text-2xl font-semibold mb-4 text-center">Add Your Note</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-center">
+              Add Your Note
+            </h2>
 
             <div className="mb-4">
               <label className="block text-gray-700 mb-1" htmlFor="title">
@@ -26,6 +57,7 @@ function Note() {
               <input
                 type="text"
                 id="title"
+                ref={Title}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter note title"
               />
@@ -38,6 +70,7 @@ function Note() {
               <textarea
                 id="content"
                 rows="4"
+                ref={Content}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter note content"
               ></textarea>
@@ -46,6 +79,7 @@ function Note() {
             <div className="flex justify-between mt-6">
               <button
                 type="submit"
+                onClick={AddNotes}
                 className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
               >
                 Save
@@ -75,8 +109,9 @@ function Note() {
             </button>
           </div>
 
+          {/* Notes Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sampleNotes.map((note) => (
+            {notes.map((note) => (
               <div
                 key={note.id}
                 className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition"
@@ -86,8 +121,12 @@ function Note() {
                 </h2>
                 <p className="text-gray-600">{note.content}</p>
                 <div className="mt-4 flex justify-end space-x-2">
-                  <button className="text-blue-500 hover:underline">Edit</button>
-                  <button className="text-red-500 hover:underline">Delete</button>
+                  <button className="text-blue-500 hover:underline">
+                    Edit
+                  </button>
+                  <button className="text-red-500 hover:underline">
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
