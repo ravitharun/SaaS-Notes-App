@@ -1,13 +1,13 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Navbar from "./Navbar";
-
+import axios from "axios";
 function Note() {
   const sampleNotes = [
-    {
-      id: 1,
-      title: "Meeting Notes",
-      content: "Discuss project milestones and deadlines.",
-    },
+    // {
+    //   id: 1,
+    //   title: "Meeting Notes",
+    //   content: "Discuss project milestones and deadlines.",
+    // },
   ];
 
   const [open, setOpen] = useState(false);
@@ -16,27 +16,60 @@ function Note() {
   const Title = useRef("");
   const Content = useRef("");
 
-  const AddNotes = (e) => {
+  const AddNotes = async (e) => {
     e.preventDefault();
-    const newNote = {
-      id: Date.now(),
-      title: Title.current.value,
-      content: Content.current.value,
-    };
-    if (!newNote.title || !newNote.content) {
-      return alert("Please fill all fields!");
+    try {
+      const newNote = {
+        id: Date.now(),
+        title: Title.current.value,
+        content: Content.current.value,
+      };
+      if (!newNote.title || !newNote.content) {
+        return alert("Please fill all fields!");
+      }
+      const response = await axios.post("http://localhost:3000/AddNotes/New", {
+        NotesInfo: newNote,
+      });
+      console.log(newNote, "newNote");
+      setNotes(response.data);
+      setOpen(false);
+      Title.current.value = "";
+      Content.current.value = "";
+    } catch (err) {
+      console.log(err.message);
     }
-
-    setNotes([...notes, newNote]);
-    setOpen(false);
-    Title.current.value = "";
-    Content.current.value = "";
   };
 
+  const Edit = async (NoteId) => {
+    try {
+      const updatedNote = {
+        id: NoteId,
+        title: Title.current.value,
+        content: Content.current.value,
+      };
+      const response = await axios.put(
+        `http://localhost:3000/notes/${NoteId}`,
+        { NotesInfo: updatedNote }
+      );
+      setNotes(response.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+  const NoteDelete = async (NoteId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/notes/${NoteId}`
+      );
+      setNotes(response.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
   return (
     <>
       <Navbar />
-      
+
       {/* Popup Form */}
       {open && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 transition-opacity">
@@ -97,7 +130,11 @@ function Note() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {notes.length==0?<div>
+          <center className="text-gray-500 text-lg font-semibold">
+            NO NOTES ARE FOUND
+          </center>
+        </div>:<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {notes.map((note) => (
               <div
                 key={note.id}
@@ -108,12 +145,22 @@ function Note() {
                 </h2>
                 <p className="text-gray-600 mb-4">{note.content}</p>
                 <div className="flex justify-end gap-3">
-                  <button className="text-blue-500 hover:underline">Edit</button>
-                  <button className="text-red-500 hover:underline">Delete</button>
+                  <button
+                    className="text-blue-500 hover:underline"
+                    onClick={() => Edit(note._id)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="text-red-500 hover:underline"
+                    onClick={() => NoteDelete(note._id)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
-          </div>
+          </div>}
         </div>
       </div>
     </>

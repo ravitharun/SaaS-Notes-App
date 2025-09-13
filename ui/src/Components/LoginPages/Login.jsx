@@ -4,6 +4,7 @@ function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [role, setRole] = React.useState("Member");
+  const [Company, setCompany] = React.useState("Acme");
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
@@ -86,15 +87,15 @@ function Login() {
             </label>
             <div className="relative">
               <select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
+                value={Company}
+                onChange={(e) => setCompany(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 appearance-none"
               >
                 <option value="Acme">Acme</option>
                 <option value="Globex" className="text-red-500">Globex</option>
               </select>
               <div className="absolute right-3 top-2.5 text-gray-400">
-                {role === "Admin" ? "admin" : "user"}
+                {Company === "Acme" ? "Acme" : "Globex"}
               </div>
             </div>
           </div>

@@ -8,7 +8,7 @@ function Register() {
   const [role, setRole] = React.useState("Member");
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-
+  const [Company, setCompany] = React.useState("Acme");
   const handleRegister = () => {
     setError("");
     if (password !== confirmPassword) {
@@ -89,6 +89,24 @@ function Register() {
               <option value="Admin">Admin</option>
               <option value="Member">Member</option>
             </select>
+          </div>
+            <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Company
+            </label>
+            <div className="relative">
+              <select
+                value={Company}
+                onChange={(e) => setCompany(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 appearance-none"
+              >
+                <option value="Acme">Acme</option>
+                <option value="Globex" className="text-red-500">Globex</option>
+              </select>
+              <div className="absolute right-3 top-2.5 text-gray-400">
+                {Company === "Acme" ? "Acme" : "Globex"}
+              </div>
+            </div>
           </div>
 
           {error && <div className="text-red-500 text-sm">{error}</div>}
