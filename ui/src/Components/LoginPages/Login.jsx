@@ -80,6 +80,24 @@ function Login() {
               </div>
             </div>
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Company
+            </label>
+            <div className="relative">
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 appearance-none"
+              >
+                <option value="Acme">Acme</option>
+                <option value="Globex" className="text-red-500">Globex</option>
+              </select>
+              <div className="absolute right-3 top-2.5 text-gray-400">
+                {role === "Admin" ? "admin" : "user"}
+              </div>
+            </div>
+          </div>
 
           {error && <div className="text-red-500 text-sm">{error}</div>}
 
