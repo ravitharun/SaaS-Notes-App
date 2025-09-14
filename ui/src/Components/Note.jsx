@@ -1,21 +1,29 @@
 import { useRef, useState } from "react";
 import Navbar from "./Navbar";
 import axios from "axios";
+import { useEffect } from "react";
 function Note() {
-  const sampleNotes = [
-    // {
-    //   id: 1,
-    //   title: "Meeting Notes",
-    //   content: "Discuss project milestones and deadlines.",
-    // },
-  ];
+
 
   const [open, setOpen] = useState(false);
-  const [notes, setNotes] = useState(sampleNotes);
+  const [notes, setNotes] = useState([]);
 
   const Title = useRef("");
   const Content = useRef("");
-
+  useEffect(() => {
+ const GetNotes=async()=>{
+ try{
+ const responseNotes=await axios.get("http://localhost:3000/responseNotes")
+  console.log(responseNotes.data)
+  // setNotes(responseNotes.data)
+ }
+ catch(err){
+  console.log(err.message)
+ }
+}
+GetNotes()
+  }, [])
+  
   const AddNotes = async (e) => {
     e.preventDefault();
     try {

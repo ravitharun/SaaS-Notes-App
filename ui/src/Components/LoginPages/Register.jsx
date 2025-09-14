@@ -1,3 +1,4 @@
+import axios from "axios";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -9,16 +10,28 @@ function Register() {
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [Company, setCompany] = React.useState("Acme");
-  const handleRegister = () => {
-    setError("");
-    if (password !== confirmPassword) {
-      setError("Passwords do not match!");
-      return;
+  const handleRegister = async () => {
+    try {
+      setError("");
+      if (password !== confirmPassword) {
+        setError("Passwords do not match!");
+        return;
+      }
+      const Userinfo = { email, password, role, Company };
+      console.log(Userinfo, "Userinfo");
+      const responseAuth = await axios.post(
+        "http://localhost:3000/Sass/login/RegisterUser",{Userinfo:Userinfo}
+      );
+      console.log(
+        responseAuth.data.message,
+        "responseAuth from the registration"
+      );
+      setLoading(true);
+      console.log({ email, password, role });
+      setTimeout(() => setLoading(false), 1000); // simulate registration
+    } catch (err) {
+      console.log(err.message);
     }
-
-    setLoading(true);
-    console.log({ email, password, role });
-    setTimeout(() => setLoading(false), 1000); // simulate registration
   };
 
   return (
@@ -90,7 +103,7 @@ function Register() {
               <option value="Member">Member</option>
             </select>
           </div>
-            <div>
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Company
             </label>
@@ -101,7 +114,9 @@ function Register() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 appearance-none"
               >
                 <option value="Acme">Acme</option>
-                <option value="Globex" className="text-red-500">Globex</option>
+                <option value="Globex" className="text-red-500">
+                  Globex
+                </option>
               </select>
               <div className="absolute right-3 top-2.5 text-gray-400">
                 {Company === "Acme" ? "Acme" : "Globex"}

@@ -6,7 +6,13 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const LoginRouter = require('./Login/Login');
-const cors = require('cors'); // <-- Add this
+const cors = require('cors');
+
+// 👇 Import your DB connection
+const { connectDB } = require('./bin/Db');
+
+// 👇 Call it before anything else
+connectDB();
 
 var app = express();
 

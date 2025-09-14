@@ -1,15 +1,17 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+router.use(express.json());
 // Register user to check the  user is Registered or not
 
-
-const Auth=()=>{
+const Auth = () => {
     console.log('middlewares to valid the token')
 }
+
 router.post("/RegisterUser", async (req, res) => {
     try {
-        const { UserInfo } = req.body
-        console.log(UserInfo, 'UserInfo')
+        const {UserInfo} = req.body;
+        console.log(UserInfo, 'UserInfo data')
+        res.json({ message: 'User info got it' })
 
     }
     catch (Err) {
@@ -22,7 +24,7 @@ router.post("/RegisterUser", async (req, res) => {
 })
 
 // login user to check the valid user
-router.get("/LoginUser",Auth, async (req, res) => {
+router.get("/LoginUser", Auth, async (req, res) => {
     try {
         const { UserInfo } = req.query
         console.log(UserInfo, 'UserInfo')
