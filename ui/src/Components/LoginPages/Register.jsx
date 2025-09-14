@@ -17,10 +17,8 @@ function Register() {
         setError("Passwords do not match!");
         return;
       }
-      const Userinfo = { email, password, role, Company };
-      console.log(Userinfo, "Userinfo");
       const responseAuth = await axios.post(
-        "http://localhost:3000/Sass/login/RegisterUser",{Userinfo:Userinfo}
+        "http://localhost:3000/Sass/login/RegisterUser",{ email, password, role, Company } 
       );
       console.log(
         responseAuth.data.message,

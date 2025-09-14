@@ -11,8 +11,6 @@ function Note() {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-
-  // Fetch notes on load
   useEffect(() => {
     const fetchNotes = async () => {
       try {
@@ -41,7 +39,7 @@ function Note() {
       } else {
         // Add new note
         const response = await axios.post("http://localhost:3000/AddNotes/New", {
-          NotesInfo: { title, content },
+          NotesInfo: { title, content,Company:localStorage.getItem('Company') },
         });
         setNotes((prev) => [...prev, response.data]);
       }

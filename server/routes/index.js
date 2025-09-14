@@ -16,6 +16,18 @@ router.post('/AddNotes/New', async (req, res) => {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
+    const Acemecheck=await Note.find({company:'Aceme'}).countDocuments();
+    const Globexcheck=await Note.find({company:'Globex'}).countDocuments();
+if(Acemecheck<=3)
+  {
+    return res.json({message:"free mode complted by  Aceme"})
+  }
+  else if(Globexcheck<=3)
+
+    {
+
+      return res.json({message:"free mode complted by Globex"})
+    }
     const NotesUserAdd = new Note({
       title: NotesInfo.title,
       content: NotesInfo.content,

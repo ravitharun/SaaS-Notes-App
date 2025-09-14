@@ -22,6 +22,7 @@ const loginSchema = new mongoose.Schema(
   {
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    Company: { type: String, default:'Acme' },
     role: { type: String, required: true }, // e.g., "admin", "user"
   },
   { timestamps: true }

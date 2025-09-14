@@ -8,29 +8,37 @@ function Login() {
   const [Company, setCompany] = React.useState("Acme");
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-
   const handleLogin = async () => {
     setLoading(true);
     setError("");
-    console.log({ email, password, role });
 
-    const LoginAuth = await axios.get("http://localhost:3000/LoginUser", {
-      params: {
-        email,
-        password,
-        role,
-        Company
-      },
-    });
-    console.log(LoginAuth, "LoginAuth");
-      if (LoginAuth.data.message === "User info got it") {
-        alert("Login Successful");
-      } else {
-        setError("Invalid credentials");
+    const userLogin = {
+      email,
+      password,
+      role,
+      Company,
+    };
+    console.log(userLogin);
+    const LoginAuth = await axios.get(
+      "http://localhost:3000/Sass/login/LoginUser",
+      {
+        params: {
+          userLogin: userLogin,
+        },
       }
+    );
+    console.log(LoginAuth.data.message, "LoginAuth");
+    localStorage.setItem("token", LoginAuth.data.token);
+    localStorage.setItem("Company", LoginAuth.data.message.Company);
+    localStorage.setItem("login", true);
+    if (LoginAuth.data.message === "User info got it") {
+      alert("Login Successful");
+    } else {
+      setError("Invalid credentials");
+    }
+ 
     setLoading(false);
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-400 to-purple-500">
