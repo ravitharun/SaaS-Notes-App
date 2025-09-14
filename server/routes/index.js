@@ -67,6 +67,21 @@ router.get("/EditGetNotes/:id",async(req,res)=>{
     res.status(500).json({message:error.message});
   }
 })
-
+router.put("/EditGetNotesEdit/:id",async(req,res)=>{
+  try {
+    const {id} = req.params;
+    const {title,content} = req.body;
+    console.log({title,content,id},'body')
+    const updatedNote = await Note.findByIdAndUpdate(
+      id,
+      {title,content},
+      {new:true}
+    );
+    if(!updatedNote) return res.status(404).json({message:"Note not found"});
+    res.json(updatedNote);
+  } catch (error) {
+    res.status(500).json({message:error.message});
+  }
+})
 
 module.exports = router;

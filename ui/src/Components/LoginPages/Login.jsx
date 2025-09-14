@@ -1,3 +1,4 @@
+import axios from "axios";
 import React from "react";
 import { Link } from "react-router-dom";
 function Login() {
@@ -8,17 +9,28 @@ function Login() {
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setLoading(true);
     setError("");
     console.log({ email, password, role });
-    setTimeout(() => setLoading(false), 1000); // simulate login delay
+
+    const LoginAuth = await axios.get("http://localhost:3000/LoginUser", {
+      params: {
+        email,
+        password,
+        role,
+        Company
+      },
+    });
+    console.log(LoginAuth, "LoginAuth");
+      if (LoginAuth.data.message === "User info got it") {
+        alert("Login Successful");
+      } else {
+        setError("Invalid credentials");
+      }
+    setLoading(false);
   };
 
-  const handleRegister = () => {
-    console.log("Redirect to register page");
-    // You can replace this with navigation to register page
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-400 to-purple-500">
@@ -92,7 +104,9 @@ function Login() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 appearance-none"
               >
                 <option value="Acme">Acme</option>
-                <option value="Globex" className="text-red-500">Globex</option>
+                <option value="Globex" className="text-red-500">
+                  Globex
+                </option>
               </select>
               <div className="absolute right-3 top-2.5 text-gray-400">
                 {Company === "Acme" ? "Acme" : "Globex"}
@@ -115,7 +129,6 @@ function Login() {
         <Link to="/Register">
           <button
             type="button"
-            onClick={handleRegister}
             className="w-full mt-2 bg-gray-100 text-gray-700 py-2 rounded-md font-semibold hover:bg-gray-200 transition"
           >
             Register

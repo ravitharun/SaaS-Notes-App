@@ -9,7 +9,7 @@ const Auth = () => {
 
 router.post("/RegisterUser", async (req, res) => {
     try {
-        const {UserInfo} = req.body;
+        const { UserInfo } = req.body;
         console.log(UserInfo, 'UserInfo data')
         res.json({ message: 'User info got it' })
 
@@ -26,8 +26,8 @@ router.post("/RegisterUser", async (req, res) => {
 // login user to check the valid user
 router.get("/LoginUser", Auth, async (req, res) => {
     try {
-        const { UserInfo } = req.query
-        console.log(UserInfo, 'UserInfo')
+        const { email, password, role } = req.query
+        console.log(email, password, role, 'UserInfo')
 
     }
     catch (Err) {

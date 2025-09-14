@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import axios from "axios";
+import UpgradeProPlan from "./UpgradeProPlan";
 
 function Note() {
   const [open, setOpen] = useState(false);
@@ -31,7 +32,7 @@ function Note() {
     try {
       if (edit) {
         // Edit note
-        await axios.put(`http://localhost:3000/notes/${editId}`, { title, content });
+        await axios.put(`http://localhost:3000/EditGetNotesEdit/${editId}`, { title, content });
         setNotes((prev) =>
           prev.map((n) => (n._id === editId ? { ...n, title, content } : n))
         );
@@ -180,6 +181,7 @@ function Note() {
           )}
         </div>
       </div>
+      <UpgradeProPlan></UpgradeProPlan>
     </>
   );
 }
