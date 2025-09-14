@@ -27,7 +27,7 @@ app.set('view engine', 'jade');
 // CORS middleware
 app.use(
   cors({
-    origin: ['http://localhost:5173'], // allowed frontend(s)
+    origin: ['http://localhost:5173','https://sass-notes-web.netlify.app/'], // allowed frontend(s)
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })

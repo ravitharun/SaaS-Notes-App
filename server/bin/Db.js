@@ -14,11 +14,10 @@ const noteSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     content: { type: String, required: true },
-    company: { type: String, required: true },
+    company: { type: String, required: true ,default:"Aceme"},
   },
   { timestamps: true } // handles createdAt & updatedAt automatically
 );
-
 const loginSchema = new mongoose.Schema(
   {
     email: { type: String, required: true, unique: true },
