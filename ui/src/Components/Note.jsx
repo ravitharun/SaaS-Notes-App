@@ -3,27 +3,23 @@ import Navbar from "./Navbar";
 import axios from "axios";
 import { useEffect } from "react";
 function Note() {
-
-
   const [open, setOpen] = useState(false);
   const [notes, setNotes] = useState([]);
 
   const Title = useRef("");
   const Content = useRef("");
   useEffect(() => {
- const GetNotes=async()=>{
- try{
- const responseNotes=await axios.get("http://localhost:3000/responseNotes")
-  console.log(responseNotes.data)
-  // setNotes(responseNotes.data)
- }
- catch(err){
-  console.log(err.message)
- }
-}
-GetNotes()
-  }, [])
-  
+    const fetchNotes = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/getnots");
+        setNotes(response.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    fetchNotes();
+  }, []);
+
   const AddNotes = async (e) => {
     e.preventDefault();
     try {
@@ -65,11 +61,14 @@ GetNotes()
     }
   };
   const NoteDelete = async (NoteId) => {
+    console.log(NoteId,'NoteId Deletd')
     try {
       const response = await axios.delete(
         `http://localhost:3000/notes/${NoteId}`
       );
-      setNotes(response.data);
+      // setNotes(response.data);
+      setNotes(prevNotes => prevNotes.filter(note => note._id !== NoteId));
+
     } catch (err) {
       console.log(err.message);
     }
@@ -138,37 +137,41 @@ GetNotes()
             </button>
           </div>
 
-          {notes.length==0?<div>
-          <center className="text-gray-500 text-lg font-semibold">
-            NO NOTES ARE FOUND
-          </center>
-        </div>:<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {notes.map((note) => (
-              <div
-                key={note.id}
-                className="bg-white p-5 rounded-2xl shadow-md hover:shadow-xl transition transform hover:scale-105"
-              >
-                <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                  {note.title}
-                </h2>
-                <p className="text-gray-600 mb-4">{note.content}</p>
-                <div className="flex justify-end gap-3">
-                  <button
-                    className="text-blue-500 hover:underline"
-                    onClick={() => Edit(note._id)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="text-red-500 hover:underline"
-                    onClick={() => NoteDelete(note._id)}
-                  >
-                    Delete
-                  </button>
+          {notes.length == 0 ? (
+            <div>
+              <center className="text-gray-500 text-lg font-semibold">
+                NO NOTES ARE FOUND
+              </center>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {notes.map((note) => (
+                <div
+                  key={note.id}
+                  className="bg-white p-5 rounded-2xl shadow-md hover:shadow-xl transition transform hover:scale-105"
+                >
+                  <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                    {note.title}
+                  </h2>
+                  <p className="text-gray-600 mb-4">{note.content}</p>
+                  <div className="flex justify-end gap-3">
+                    <button
+                      className="text-blue-500 hover:underline"
+                      onClick={() => Edit(note._id)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-red-500 hover:underline"
+                      onClick={() => NoteDelete(note._id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>}
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>
