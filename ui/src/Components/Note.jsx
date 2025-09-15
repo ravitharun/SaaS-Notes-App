@@ -6,10 +6,12 @@ import UpgradeProPlan from "./UpgradeProPlan";
 function Note() {
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [alert, setAlert] = useState(false);
   const [editId, setEditId] = useState(null);
   const [notes, setNotes] = useState([]);
 
   const [title, setTitle] = useState("");
+  const [error, setError] = useState("");
   const [content, setContent] = useState("");
   useEffect(() => {
     const fetchNotes = async () => {
@@ -30,7 +32,10 @@ function Note() {
     try {
       if (edit) {
         // Edit note
-        await axios.put(`http://localhost:3000/EditGetNotesEdit/${editId}`, { title, content });
+        await axios.put(`http://localhost:3000/EditGetNotesEdit/${editId}`, {
+          title,
+          content,
+        });
         setNotes((prev) =>
           prev.map((n) => (n._id === editId ? { ...n, title, content } : n))
         );
@@ -38,10 +43,24 @@ function Note() {
         setEditId(null);
       } else {
         // Add new note
-        const response = await axios.post("http://localhost:3000/AddNotes/New", {
-          NotesInfo: { title, content,Company:localStorage.getItem('Company') },
-        });
+        const response = await axios.post(
+          "http://localhost:3000/AddNotes/New",
+          {
+            NotesInfo: {
+              title,
+              content,
+              Company: localStorage.getItem("Company"),
+            },
+          }
+        );
         setNotes((prev) => [...prev, response.data]);
+        if (response.data.message == "free mode complted by  Aceme") {
+          setError("free mode complted by  Aceme");
+          setAlert(true);
+        } else {
+          setError("free mode complted by  Globex");
+          setAlert(true);
+        }
       }
       setTitle("");
       setContent("");
@@ -54,7 +73,9 @@ function Note() {
   // Set note for editing
   const Edit = async (NoteId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/EditGetNotes/${NoteId}`);
+      const response = await axios.get(
+        `http://localhost:3000/EditGetNotes/${NoteId}`
+      );
       const note = response.data;
       setTitle(note.title);
       setContent(note.content);
@@ -78,7 +99,6 @@ function Note() {
   return (
     <>
       <Navbar />
-
       {/* Popup Form */}
       {open && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 transition-opacity">
@@ -111,7 +131,9 @@ function Note() {
                 <button
                   onClick={AddNotes}
                   className={`px-5 py-2 rounded-lg text-white transition ${
-                    edit ? "bg-green-600 hover:bg-green-400" : "bg-blue-600 hover:bg-blue-700"
+                    edit
+                      ? "bg-green-600 hover:bg-green-400"
+                      : "bg-blue-600 hover:bg-blue-700"
                   }`}
                   type="submit"
                 >
@@ -129,8 +151,7 @@ function Note() {
           </div>
         </div>
       )}
-
-      {/* Notes Section */}
+      {alert && <UpgradeProPlan />} {/* Notes Section */}
       <div className="min-h-screen bg-gray-50 py-10 px-4 md:px-8">
         <div className="max-w-5xl mx-auto">
           <div className="flex justify-between items-center mb-8">
@@ -142,14 +163,17 @@ function Note() {
                 setTitle("");
                 setContent("");
               }}
-              className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition"
+              disabled={alert}
+              className={`${alert ? `cursor`: 'cursor-pointer'} bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition`}
             >
               + Add Note
             </button>
           </div>
 
           {!notes || notes.length === 0 ? (
-            <center className="text-gray-500 text-lg font-semibold">NO NOTES ARE FOUND</center>
+            <center className="text-gray-500 text-lg font-semibold">
+              NO NOTES ARE FOUND
+            </center>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {notes.map((note) => (
@@ -157,7 +181,9 @@ function Note() {
                   key={note._id}
                   className="bg-white p-5 rounded-2xl shadow-md hover:shadow-xl transition transform hover:scale-105"
                 >
-                  <h2 className="text-xl font-semibold text-gray-800 mb-2">{note.title}</h2>
+                  <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                    {note.title}
+                  </h2>
                   <p className="text-gray-600 mb-4">{note.content}</p>
                   <div className="flex justify-end gap-3">
                     <button
@@ -179,7 +205,6 @@ function Note() {
           )}
         </div>
       </div>
-      <UpgradeProPlan></UpgradeProPlan>
     </>
   );
 }

@@ -16,30 +16,31 @@ router.post('/AddNotes/New', async (req, res) => {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    const Acemecheck=await Note.find({company:'Aceme'}).countDocuments();
-    const Globexcheck=await Note.find({company:'Globex'}).countDocuments();
-if(Acemecheck<=3)
-  {
-    return res.json({message:"free mode complted by  Aceme"})
-  }
-  else if(Globexcheck<=3)
-
-    {
-
-      return res.json({message:"free mode complted by Globex"})
+    const Acemecheck = await Note.find({ company: 'Aceme' }).countDocuments();
+    const Globexcheck = await Note.find({ company: 'Globex' }).countDocuments();
+    console.log(Acemecheck, 'Acemecheck')
+    if (Acemecheck >= 3) {
+      return res.json({ message: "free mode complted by  Aceme" })
     }
-    const NotesUserAdd = new Note({
-      title: NotesInfo.title,
-      content: NotesInfo.content,
-      company: NotesInfo.company || "Aceme"
-    });
+    else if (Globexcheck >= 3) {
 
-    await NotesUserAdd.save();
+      return res.json({ message: "free mode complted by Globex" })
+    }
+    else{
 
-    res.status(201).json({
-      message: 'Note Added Successfully',
-      note: NotesUserAdd
-    });
+      const NotesUserAdd = new Note({
+        title: NotesInfo.title,
+        content: NotesInfo.content,
+        company: NotesInfo.company || "Aceme"
+      });
+      
+      await NotesUserAdd.save();
+      
+      res.status(201).json({
+        message: 'Note Added Successfully',
+        note: NotesUserAdd
+      });
+    }
 
   } catch (error) {
     console.log(error.message)
@@ -68,31 +69,31 @@ router.delete("/notes/:id", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-router.get("/EditGetNotes/:id",async(req,res)=>{
+router.get("/EditGetNotes/:id", async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     const note = await Note.findById(id);
-    if(!note) return res.status(404).json({message:"Note not found"});
-    console.log(note,'note')
+    if (!note) return res.status(404).json({ message: "Note not found" });
+    console.log(note, 'note')
     res.json(note);
   } catch (error) {
-    res.status(500).json({message:error.message});
+    res.status(500).json({ message: error.message });
   }
 })
-router.put("/EditGetNotesEdit/:id",async(req,res)=>{
+router.put("/EditGetNotesEdit/:id", async (req, res) => {
   try {
-    const {id} = req.params;
-    const {title,content} = req.body;
-    console.log({title,content,id},'body')
+    const { id } = req.params;
+    const { title, content } = req.body;
+    console.log({ title, content, id }, 'body')
     const updatedNote = await Note.findByIdAndUpdate(
       id,
-      {title,content},
-      {new:true}
+      { title, content },
+      { new: true }
     );
-    if(!updatedNote) return res.status(404).json({message:"Note not found"});
+    if (!updatedNote) return res.status(404).json({ message: "Note not found" });
     res.json(updatedNote);
   } catch (error) {
-    res.status(500).json({message:error.message});
+    res.status(500).json({ message: error.message });
   }
 })
 
